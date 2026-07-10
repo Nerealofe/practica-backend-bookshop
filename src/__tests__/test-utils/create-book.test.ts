@@ -49,4 +49,39 @@ describe('POST /books', () => {
 
     expect(createdBook).not.toBeNull();
   });
+
+  test('Given no token, returns 401', async () => {
+    const response = await request(api).post('/books').send({
+      title: 'Clean Code',
+      description: 'Libro en perfecto estado',
+      price: 20,
+      author: 'Robert C. Martin',
+    });
+
+    expect(response.status).toBe(401);
+  });
+
+  test('Given invalid data, returns 400', async () => {
+    await request(api).post('/authentication/signup').send({
+      email: 'seller@email.com',
+      password: 'Password123*',
+    });
+
+    const loginResponse = await request(api).post('/authentication/signin').send({
+      email: 'seller@email.com',
+      password: 'Password123*',
+    });
+
+    const response = await request(api)
+      .post('/books')
+      .set('Authorization', `Bearer ${loginResponse.body.accessToken}`)
+      .send({
+        title: '',
+        description: 'Libro en perfecto estado',
+        price: 20,
+        author: 'Robert C. Martin',
+      });
+
+    expect(response.status).toBe(400);
+  });
 });

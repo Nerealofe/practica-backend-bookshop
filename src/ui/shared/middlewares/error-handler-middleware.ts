@@ -1,10 +1,16 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { BusinessConflictError } from '../../../domain/errors/BusinessConflictError';
 import { EntityNotFoundError } from '../../../domain/errors/EntityNotFoundError';
 import { UnauthorizedError } from '../../../domain/errors/UnauthorizedError';
 
-export const errorHandlerMiddleware = (error: unknown, req: Request, res: Response) => {
+export const errorHandlerMiddleware = (
+  error: unknown,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction,
+) => {
   console.error(error);
 
   if (error instanceof EntityNotFoundError) {
