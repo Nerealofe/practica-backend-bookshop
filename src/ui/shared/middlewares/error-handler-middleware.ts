@@ -11,8 +11,6 @@ export const errorHandlerMiddleware = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  console.error(error);
-
   if (error instanceof EntityNotFoundError) {
     res.status(404).json({ error: error.message });
   } else if (error instanceof BusinessConflictError) {

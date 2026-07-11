@@ -8,6 +8,18 @@ export interface CreateBookParams {
   ownerId: number;
 }
 
+export interface FindBooksCriteria {
+  page: number;
+  limit: number;
+  search?: string;
+}
+
+export interface FindBooksResult {
+  books: Book[];
+  total: number;
+}
+
 export interface BookRepository {
   create(params: CreateBookParams): Promise<Book>;
+  findMany(criteria: FindBooksCriteria): Promise<FindBooksResult>;
 }
