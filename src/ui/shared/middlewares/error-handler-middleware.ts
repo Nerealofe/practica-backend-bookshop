@@ -3,6 +3,7 @@ import { ZodError } from 'zod';
 import { BusinessConflictError } from '../../../domain/errors/BusinessConflictError';
 import { EntityNotFoundError } from '../../../domain/errors/EntityNotFoundError';
 import { UnauthorizedError } from '../../../domain/errors/UnauthorizedError';
+import { ForbiddenOperationError } from '../../../domain/errors/ForbiddenOperationError';
 
 export const errorHandlerMiddleware = (
   error: unknown,
@@ -17,6 +18,8 @@ export const errorHandlerMiddleware = (
     res.status(409).json({ error: error.message });
   } else if (error instanceof UnauthorizedError) {
     res.status(401).json({ error: error.message });
+  } else if (error instanceof ForbiddenOperationError) {
+    res.status(403).json({ error: error.message });
   } else if (error instanceof ZodError) {
     res.status(400).json({ error: error.issues[0].message });
   } else {

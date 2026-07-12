@@ -22,4 +22,6 @@ export interface FindBooksResult {
 export interface BookRepository {
   create(params: CreateBookParams): Promise<Book>;
   findMany(criteria: FindBooksCriteria): Promise<FindBooksResult>;
+  findById(id: number): Promise<Book | null>;
+  markAsSold(id: number, soldAt: Date): Promise<Book>;
 }

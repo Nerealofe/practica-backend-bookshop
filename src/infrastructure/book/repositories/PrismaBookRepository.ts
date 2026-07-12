@@ -90,4 +90,52 @@ export class PrismaBookRepository implements BookRepository {
       total: booksCount,
     };
   }
+
+  async findById(id: number): Promise<Book | null> {
+    const prismaBook = await this.prisma.book.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!prismaBook) {
+      return null;
+    }
+
+    return new Book({
+      id: prismaBook.id,
+      title: prismaBook.title,
+      description: prismaBook.description,
+      price: prismaBook.price,
+      author: prismaBook.author,
+      status: prismaBook.status,
+      ownerId: prismaBook.ownerId,
+      soldAt: prismaBook.soldAt,
+      createdAt: prismaBook.createdAt,
+    });
+  }
+
+  async markAsSold(id: number, soldAt: Date): Promise<Book> {
+    const prismaBook = await this.prisma.book.update({
+      where: {
+        id,
+      },
+      data: {
+        status: 'SOLD',
+        soldAt,
+      },
+    });
+
+    return new Book({
+      id: prismaBook.id,
+      title: prismaBook.title,
+      description: prismaBook.description,
+      price: prismaBook.price,
+      author: prismaBook.author,
+      status: prismaBook.status,
+      ownerId: prismaBook.ownerId,
+      soldAt: prismaBook.soldAt,
+      createdAt: prismaBook.createdAt,
+    });
+  }
 }
