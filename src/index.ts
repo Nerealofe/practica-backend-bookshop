@@ -9,7 +9,7 @@ environmentService.load();
 const { PORT } = environmentService.get();
 
 api.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Running Server in http://localhost:${PORT}`);
 });
 
 // Todos los lunes a las 09:00
