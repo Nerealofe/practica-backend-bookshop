@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import z from 'zod';
 import { BuyBookUseCase } from '../../../domain/book/use-cases/buy-book';
 import { PrismaBookRepository } from '../../../infrastructure/book/repositories/PrismaBookRepository';
+import { PrismaUserRepository } from '../../../infrastructure/user/repositories/PrismaUserRepository';
+import { FakeEmailService } from '../../../infrastructure/shared/FakeEmailService';
+//import { NodemailerEmailService } from '../../../infrastructure/shared/NodemailerEmailService';
 
 const buyBookParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
@@ -13,7 +16,11 @@ export const buyBookController = async (req: Request, res: Response, next: NextF
     const buyerId = (req as unknown as { userId: number }).userId;
 
     const bookRepository = new PrismaBookRepository();
-    const buyBookUseCase = new BuyBookUseCase(bookRepository);
+    const userRepository = new PrismaUserRepository();
+    //const emailService = new NodemailerEmailService();
+    const emailService = new FakeEmailService();
+
+    const buyBookUseCase = new BuyBookUseCase(bookRepository, userRepository, emailService);
 
     const soldBook = await buyBookUseCase.execute({
       bookId: id,

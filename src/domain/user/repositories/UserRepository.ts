@@ -8,4 +8,5 @@ export interface CreateUserParams {
 export interface UserRepository {
   findByEmail(email: string): Promise<User | null>;
   create(params: CreateUserParams): Promise<User>;
+  findById(id: number): Promise<User | null>;
 }
