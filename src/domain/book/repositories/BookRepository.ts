@@ -39,4 +39,6 @@ export interface BookRepository {
   findById(id: number): Promise<Book | null>;
   markAsSold(id: number, soldAt: Date): Promise<Book>;
   update(id: number, params: UpdateBookParams): Promise<Book>;
+  remove(id: number): Promise<void>;
+  findManyByOwnerId(ownerId: number): Promise<Book[]>;
 }

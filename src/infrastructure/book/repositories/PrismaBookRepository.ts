@@ -165,4 +165,35 @@ export class PrismaBookRepository implements BookRepository {
       createdAt: prismaBook.createdAt,
     });
   }
+
+  async remove(id: number): Promise<void> {
+    await this.prisma.book.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async findManyByOwnerId(ownerId: number): Promise<Book[]> {
+    const bookDb = await this.prisma.book.findMany({
+      where: {
+        ownerId,
+      },
+    });
+
+    return bookDb.map(
+      (bookDb) =>
+        new Book({
+          id: bookDb.id,
+          title: bookDb.title,
+          description: bookDb.description,
+          price: bookDb.price,
+          author: bookDb.author,
+          status: bookDb.status,
+          ownerId: bookDb.ownerId,
+          soldAt: bookDb.soldAt,
+          createdAt: bookDb.createdAt,
+        }),
+    );
+  }
 }
