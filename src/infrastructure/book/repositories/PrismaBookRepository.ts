@@ -4,6 +4,7 @@ import {
   CreateBookParams,
   FindBooksCriteria,
   FindBooksResult,
+  UpdateBookParams,
 } from '../../../domain/book/repositories/BookRepository';
 import { prisma } from '../../prisma-client';
 import { BookStatus } from '@prisma/client';
@@ -123,6 +124,32 @@ export class PrismaBookRepository implements BookRepository {
       data: {
         status: 'SOLD',
         soldAt,
+      },
+    });
+
+    return new Book({
+      id: prismaBook.id,
+      title: prismaBook.title,
+      description: prismaBook.description,
+      price: prismaBook.price,
+      author: prismaBook.author,
+      status: prismaBook.status,
+      ownerId: prismaBook.ownerId,
+      soldAt: prismaBook.soldAt,
+      createdAt: prismaBook.createdAt,
+    });
+  }
+
+  async update(id: number, params: UpdateBookParams): Promise<Book> {
+    const prismaBook = await this.prisma.book.update({
+      where: {
+        id,
+      },
+      data: {
+        title: params.title,
+        description: params.description,
+        price: params.price,
+        author: params.author,
       },
     });
 
