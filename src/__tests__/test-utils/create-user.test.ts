@@ -4,6 +4,7 @@ import { prisma } from '../../infrastructure/prisma-client';
 import { environmentService } from '../../infrastructure/EnvironmentService';
 
 beforeAll(() => {
+  process.env.NODE_ENV = 'test';
   environmentService.load();
 });
 

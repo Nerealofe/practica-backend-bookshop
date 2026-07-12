@@ -17,7 +17,7 @@ export const createBookController = async (req: Request, res: Response, next: Ne
     const bookRepository = new PrismaBookRepository();
     const createBookUseCase = new CreateBookUseCase(bookRepository);
 
-    const userId = (req as unknown as { userId: number }).userId;
+    const userId = req.userId!;
 
     const newBook = await createBookUseCase.execute({
       title,

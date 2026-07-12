@@ -18,7 +18,7 @@ export const authenticationMiddleware = (req: Request, res: Response, next: Next
     return;
   }
 
-  (req as Request & { userId?: number }).userId = decodedToken.userId;
+  req.userId = decodedToken.userId;
 
   next();
 };

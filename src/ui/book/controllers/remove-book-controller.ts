@@ -11,7 +11,7 @@ export const removeBookController = async (req: Request, res: Response, next: Ne
   try {
     const { id } = removeBookParamsSchema.parse(req.params);
 
-    const userId = (req as unknown as { userId: number }).userId;
+    const userId = req.userId!;
 
     const bookRepository = new PrismaBookRepository();
     const removeBookUseCase = new RemoveBookUseCase(bookRepository);

@@ -4,7 +4,7 @@ import { PrismaBookRepository } from '../../../infrastructure/book/repositories/
 
 export const findMyBooksController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = (req as unknown as { userId: number }).userId;
+    const userId = req.userId!;
     const bookRepository = new PrismaBookRepository();
     const findMyBooksUseCase = new FindMyBooksUseCase(bookRepository);
     const books = await findMyBooksUseCase.execute(userId);

@@ -4,7 +4,8 @@ import { BuyBookUseCase } from '../../../domain/book/use-cases/buy-book';
 import { PrismaBookRepository } from '../../../infrastructure/book/repositories/PrismaBookRepository';
 import { PrismaUserRepository } from '../../../infrastructure/user/repositories/PrismaUserRepository';
 import { FakeEmailService } from '../../../infrastructure/shared/FakeEmailService';
-//import { NodemailerEmailService } from '../../../infrastructure/shared/NodemailerEmailService';
+import { NodemailerEmailService } from '../../../infrastructure/shared/NodemailerEmailService';
+import { environmentService } from '../../../infrastructure/EnvironmentService';
 
 const buyBookParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
@@ -13,12 +14,13 @@ const buyBookParamsSchema = z.object({
 export const buyBookController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = buyBookParamsSchema.parse(req.params);
-    const buyerId = (req as unknown as { userId: number }).userId;
-
+    const buyerId = req.userId!;
     const bookRepository = new PrismaBookRepository();
     const userRepository = new PrismaUserRepository();
-    //const emailService = new NodemailerEmailService();
-    const emailService = new FakeEmailService();
+
+    const { NODE_ENV } = environmentService.get();
+    const emailService =
+      NODE_ENV === 'test' ? new FakeEmailService() : new NodemailerEmailService();
 
     const buyBookUseCase = new BuyBookUseCase(bookRepository, userRepository, emailService);
 
